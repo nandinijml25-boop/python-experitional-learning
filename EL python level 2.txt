@@ -1,0 +1,89 @@
+import json
+import os
+
+FILE = "contacts.json"
+
+def load_contacts():
+    if os.path.exists(FILE):
+        try:
+            with open(FILE, "r") as f:
+                return json.load(f)
+        except:
+            return {}
+    return {}
+
+def save_contacts():
+    with open(FILE, "w") as f:
+        json.dump(contacts, f, indent=4)
+
+contacts = load_contacts()
+
+while True:
+    print("\n===== CONTACT LIST MANAGEMENT SYSTEM =====")
+    print("1. Add Contact")
+    print("2. View Contacts")
+    print("3. Search Contact")
+    print("4. Update Contact")
+    print("5. Delete Contact")
+    print("6. Exit")
+
+    choice = input("Enter choice: ")
+
+    if choice == "1":
+        name = input("Name: ")
+        contacts[name] = {
+            "Mobile": input("Mobile: "),
+            "Email": input("Email: "),
+            "Address": input("Address: "),
+            "Organization": input("Organization: ")
+        }
+        save_contacts()
+        print("Contact added successfully!")
+
+    elif choice == "2":
+        if not contacts:
+            print("No contacts found.")
+        else:
+            for name, info in contacts.items():
+                print("\nName:", name)
+                for key, value in info.items():
+                    print(key + ":", value)
+
+    elif choice == "3":
+        name = input("Enter name to search: ")
+        if name in contacts:
+            print("\nContact Found!")
+            for key, value in contacts[name].items():
+                print(key + ":", value)
+        else:
+            print("Contact not found.")
+
+    elif choice == "4":
+        name = input("Enter name to update: ")
+        if name in contacts:
+            contacts[name] = {
+                "Mobile": input("New Mobile: "),
+                "Email": input("New Email: "),
+                "Address": input("New Address: "),
+                "Organization": input("New Organization: ")
+            }
+            save_contacts()
+            print("Contact updated successfully!")
+        else:
+            print("Contact not found.")
+
+    elif choice == "5":
+        name = input("Enter name to delete: ")
+        if name in contacts:
+            del contacts[name]
+            save_contacts()
+            print("Contact deleted successfully!")
+        else:
+            print("Contact not found.")
+
+    elif choice == "6":
+        print("Thank you for using Contact List Management System!")
+        break
+
+    else:
+        print("Invalid choice. Please enter 1-6.")
